@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAHLANGU LEGACY FINANCE SERVICES</title>
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:#090909;
+color:#171717;
+padding:20px;
+}
+
+.container{
+max-width:1300px;
+margin:auto;
+}
+
+/* HEADER */
+header{
+position:relative;
+min-height:360px;
+background-image:
+linear-gradient(rgba(0,0,0,.78),rgba(0,0,0,.62)),
+url("https://images.pexels.com/photos/8442322/pexels-photo-8442322.jpeg");
+background-size:cover;
+background-position:center;
+border-radius:24px;
+overflow:hidden;
+margin-bottom:25px;
+border:1px solid #3b3014;
+box-shadow:0 15px 45px rgba(0,0,0,.45);
+}
+
+header:after{
+content:"";
+position:absolute;
+left:0;
+right:0;
+bottom:0;
+height:5px;
+background:linear-gradient(90deg,#8c6a16,#f1d06a,#8c6a16);
+}
+
+.hero-content{
+position:relative;
+z-index:2;
+min-height:360px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+padding:45px;
+}
+
+.logo-circle{
+width:80px;
+height:80px;
+border:2px solid #d4af37;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+color:#d4af37;
+font-size:12px;
+font-weight:bold;
+margin-bottom:25px;
+background:rgba(0,0,0,.55);
+}
+
+.company-name{
+max-width:900px;
+font-size:clamp(30px,5vw,58px);
+line-height:1.05;
+font-weight:900;
+letter-spacing:1px;
+color:white;
+}
+
+.motto{
+margin-top:18px;
+color:#d4af37;
+font-size:clamp(15px,2vw,21px);
+font-weight:800;
+letter-spacing:3px;
+text-transform:uppercase;
+}
+
+.company-details{
+margin-top:25px;
+color:#e5e5e5;
+font-size:14px;
+line-height:1.7;
+}
+
+/* CARDS */
+.cards{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:18px;
+margin-bottom:25px;
+}
+
+.card{
+position:relative;
+background:linear-gradient(145deg,#1a1a1a,#101010);
+color:white;
+padding:24px;
+border-radius:18px;
+border:1px solid #292929;
+box-shadow:0 8px 25px rgba(0,0,0,.25);
+}
+
+.card:before{
+content:"";
+position:absolute;
+left:0;
+top:0;
+bottom:0;
+width:4px;
+background:#d4af37;
+}
+
+.card h3{
+color:#a8a8a8;
+font-size:12px;
+text-transform:uppercase;
+letter-spacing:1px;
+margin-bottom:12px;
+}
+
+.card p{
+font-size:27px;
+font-weight:900;
+color:white;
+}
+
+/* SECTIONS */
+.section{
+background:white;
+padding:28px;
+border-radius:20px;
+margin-bottom:25px;
+box-shadow:0 8px 30px rgba(0,0,0,.16);
+}
+
+.section h2{
+font-size:23px;
+font-weight:900;
+margin-bottom:20px;
+}
+
+form{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px;
+}
+
+input,select,button{
+width:100%;
+padding:14px;
+border-radius:10px;
+font-size:14px;
+}
+
+input,select{
+border:1px solid #d4d4d4;
+background:#fafafa;
+color:#171717;
+}
+
+input:focus,select:focus{
+outline:none;
+border-color:#d4af37;
+}
+
+button{
+border:none;
+cursor:pointer;
+font-weight:800;
+background:#171717;
+color:white;
+}
+
+button:hover{
+background:#d4af37;
+color:#111;
+}
+
+.add-button{
+grid-column:1/-1;
+padding:16px;
+font-size:15px;
+letter-spacing:1px;
+}
+
+/* TABLE */
+.table-wrapper{
+overflow-x:auto;
+}
+
+table{
+width:100%;
+min-width:1000px;
+border-collapse:collapse;
+}
+
+th{
+background:#111;
+color:#d4af37;
+padding:14px 10px;
+text-align:left;
+font-size:11px;
+text-transform:uppercase;
+}
+
+td{
+padding:14px 10px;
+border-bottom:1px solid #eee;
+font-size:14px;
+}
+
+tr:hover td{
+background:#faf8f0;
+}
+
+.action-btn{
+width:auto;
+padding:8px 12px;
+margin-right:5px;
+font-size:12px;
+}
+
+.pay{
+background:#166534;
+}
+
+.pay:hover{
+background:#15803d;
+color:white;
+}
+
+.undo{
+background:#8c6a16;
+}
+
+.undo:hover{
+background:#d4af37;
+color:#111;
+}
+
+.delete{
+background:#991b1b;
+}
+
+.delete:hover{
+background:#dc2626;
+color:white;
+}
+
+.empty{
+text-align:center;
+padding:35px;
+color:#777;
+}
+
+/* PROJECTION */
+.projection-controls{
+display:flex;
+align-items:center;
+gap:15px;
+margin-bottom:20px;
+flex-wrap:wrap;
+}
+
+.projection-controls label{
+font-weight:800;
+}
+
+.projection-controls select{
+width:auto;
+min-width:160px;
+}
+
+.projection{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:18px;
+}
+
+.projection-box{
+background:linear-gradient(145deg,#111,#222);
+color:white;
+padding:23px;
+border-radius:16px;
+border:1px solid #292929;
+border-top:4px solid #d4af37;
+}
+
+.projection-box h3{
+color:#aaa;
+font-size:12px;
+text-transform:uppercase;
+margin-bottom:10px;
+}
+
+.projection-box p{
+color:white;
+font-size:25px;
+font-weight:900;
+}
+
+/* PAID SECTION */
+.paid-section{
+border-top:5px solid #166534;
+}
+
+.paid-badge{
+display:inline-block;
+background:#dcfce7;
+color:#166534;
+padding:6px 10px;
+border-radius:20px;
+font-size:12px;
+font-weight:bold;
+margin-bottom:15px;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+
+.cards{
+grid-template-columns:1fr 1fr;
+}
+
+form{
+grid-template-columns:1fr 1fr;
+}
+
+.projection{
+grid-template-columns:1fr;
+}
+
+}
+
+@media(max-width:600px){
+
+body{
+padding:10px;
+}
+
+header{
+min-height:400px;
+}
+
+.hero-content{
+min-height:400px;
+padding:28px;
+}
+
+.company-name{
+font-size:30px;
+}
+
+.motto{
+font-size:13px;
+letter-spacing:2px;
+}
+
+.cards{
+grid-template-columns:1fr;
+}
+
+form{
+grid-template-columns:1fr;
+}
+
+.add-button{
+grid-column:auto;
+}
+
+.section{
+padding:20px;
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+
+<div class="hero-content">
+
+<div class="logo-circle">
+YOUR LOGO
+</div>
+
+<div class="company-name">
+MAHLANGU LEGACY<br>
+FINANCE SERVICES
+</div>
+
+<div class="motto">
+WHERE AMBITION MEETS LEGACY
+</div>
+
+<div class="company-details">
+Private Lending Management Dashboard<br>
+Contact: +27 76 278 8192<br>
+Email: mahlanguntuthuko5@gmail.com
+</div>
+
+</div>
+
+</header>
+
+
+<!-- DASHBOARD -->
+
+<div class="cards">
+
+<div class="card">
+<h3>Total Lent</h3>
+<p id="totalLent">R0.00</p>
+</div>
+
+<div class="card">
+<h3>Total Expected</h3>
+<p id="totalExpected">R0.00</p>
+</div>
+
+<div class="card">
+<h3>Interest Expected</h3>
+<p id="totalInterest">R0.00</p>
+</div>
+
+<div class="card">
+<h3>Active Borrowers</h3>
+<p id="activeBorrowers">0</p>
+</div>
+
+</div>
+
+
+<!-- ADD BORROWER -->
+
+<div class="section">
+
+<h2>Add New Borrower</h2>
+
+<form id="borrowerForm">
+
+<input
+type="text"
+id="name"
+placeholder="Borrower name"
+required
+>
+
+<input
+type="number"
+id="amount"
+placeholder="Amount borrowed (R)"
+min="1"
+required
+>
+
+<input
+type="number"
+id="interest"
+placeholder="Interest %"
+value="50"
+min="0"
+step="0.01"
+required
+>
+
+<input
+type="date"
+id="borrowDate"
+required
+>
+
+<input
+type="date"
+id="dueDate"
+required
+>
+
+<button
+type="submit"
+class="add-button"
+>
+ADD BORROWER
+</button>
+
+</form>
+
+</div>
+
+
+<!-- ACTIVE BORROWERS -->
+
+<div class="section">
+
+<h2>Active Borrowers</h2>
+
+<div class="table-wrapper">
+
+<table>
+
+<thead>
+
+<tr>
+<th>Name</th>
+<th>Borrowed</th>
+<th>Interest</th>
+<th>Interest Amount</th>
+<th>Total Due</th>
+<th>Paid</th>
+<th>Balance</th>
+<th>Due Date</th>
+<th>Actions</th>
+</tr>
+
+</thead>
+
+<tbody id="borrowerTable"></tbody>
+
+</table>
+
+</div>
+
+<div id="emptyMessage" class="empty">
+No active borrowers.
+</div>
+
+</div>
+
+
+<!-- PAID THIS MONTH -->
+
+<div class="section paid-section">
+
+<h2>Paid This Month</h2>
+
+<div class="paid-badge">
+PAYMENTS RECORDED
+</div>
+
+<div class="table-wrapper">
+
+<table>
+
+<thead>
+
+<tr>
+<th>Name</th>
+<th>Amount Paid</th>
+<th>Payment Date</th>
+<th>Loan Balance</th>
+<th>Action</th>
+</tr>
+
+</thead>
+
+<tbody id="paidTable"></tbody>
+
+</table>
+
+</div>
+
+<div id="paidEmpty" class="empty">
+No payments recorded this month.
+</div>
+
+</div>
+
+
+<!-- PROJECTION -->
+
+<div class="section">
+
+<h2>Financial Projection</h2>
+
+<div class="projection-controls">
+
+<label for="projectionMonths">
+Projection period:
+</label>
+
+<select
+id="projectionMonths"
+onchange="calculateProjection()"
+>
+
+<option value="1">1 Month</option>
+<option value="2">2 Months</option>
+<option value="3">3 Months</option>
+<option value="4">4 Months</option>
+<option value="5">5 Months</option>
+<option value="6" selected>6 Months</option>
+<option value="7">7 Months</option>
+<option value="8">8 Months</option>
+<option value="9">9 Months</option>
+<option value="10">10 Months</option>
+<option value="11">11 Months</option>
+<option value="12">12 Months</option>
+
+</select>
+
+</div>
+
+
+<div class="projection">
+
+<div class="projection-box">
+<h3>Current Capital Lent</h3>
+<p id="projectionCapital">R0.00</p>
+</div>
+
+<div class="projection-box">
+<h3>Projected Interest</h3>
+<p id="projectionInterest">R0.00</p>
+</div>
+
+<div class="projection-box">
+<h3>Projected Total</h3>
+<p id="projectionTotal">R0.00</p>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="empty">
+MAHLANGU LEGACY FINANCE SERVICES<br>
+WHERE AMBITION MEETS LEGACY
+</div>
+
+</div>
+
+
+<script>
+
+/* ==========================================
+   SUPABASE CONNECTION
+   ========================================== */
+
+const SUPABASE_URL =
+"https://ayqqtoujcknagmnrqfvx.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+"sb_publishable_roQAr75AQ5MHHbMyG965sQ_btnUWVnd";
+
+const supabaseClient =
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_PUBLISHABLE_KEY
+);
+
+
+/* ==========================================
+   DATA
+   ========================================== */
+
+let borrowers = [];
+let payments = [];
+
+
+/* ==========================================
+   MONEY
+   ========================================== */
+
+const money = amount =>
+"R" + Number(amount || 0).toLocaleString("en-ZA",{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+});
+
+
+/* ==========================================
+   CURRENT MONTH
+   ========================================== */
+
+function currentMonth(){
+
+const now = new Date();
+
+return now.getFullYear() + "-" +
+String(now.getMonth()+1).padStart(2,"0");
+
+}
+
+
+/* ==========================================
+   LOAD BORROWERS
+   ========================================== */
+
+async function loadBorrowers(){
+
+const {
+data,
+error
+} = await supabaseClient
+.from("borrowers")
+.select("*")
+.order("created_at",{ascending:true});
+
+
+if(error){
+
+console.error(error);
+
+alert(
+"Could not load borrowers.\n\n" +
+error.message
+);
+
+return;
+
+}
+
+
+borrowers =
+(data || []).map(b => {
+
+const amount =
+Number(b.amount || 0);
+
+const interest =
+Number(
+b.interest_rate || 0
+);
+
+const interestAmount =
+amount * (interest / 100);
+
+const totalDue =
+amount + interestAmount;
+
+const paid =
+Number(b.paid || 0);
+
+return {
+
+id:b.id,
+
+name:b.name,
+
+amount:amount,
+
+interest:interest,
+
+interestAmount:interestAmount,
+
+totalDue:totalDue,
+
+paid:paid,
+
+balance:Math.max(
+0,
+totalDue - paid
+),
+
+borrowDate:b.borrow_date,
+
+dueDate:b.due_date
+
+};
+
+});
+
+
+await loadPayments();
+
+}
+
+
+/* ==========================================
+   LOAD PAYMENTS
+   ========================================== */
+
+async function loadPayments(){
+
+const {
+data,
+error
+} = await supabaseClient
+.from("payments")
+.select("*")
+.order("created_at",{ascending:true});
+
+
+if(error){
+
+console.error(error);
+
+alert(
+"Could not load payments.\n\n" +
+error.message
+);
+
+return;
+
+}
+
+
+payments =
+(data || []).map(p => ({
+
+id:p.id,
+
+name:p.borrower_name,
+
+amount:Number(
+p.amount_paid || 0
+),
+
+date:p.payment_date,
+
+balance:Number(
+p.loan_balance || 0
+)
+
+}));
+
+
+renderEverything();
+
+}
+
+
+/* ==========================================
+   SAVE NEW BORROWER
+   ========================================== */
+
+async function addBorrowerToDatabase(){
+
+const name =
+document.getElementById("name").value.trim();
+
+const amount =
+Number(
+document.getElementById("amount").value
+);
+
+const interest =
+Number(
+document.getElementById("interest").value
+);
+
+const borrowDate =
+document.getElementById("borrowDate").value;
+
+const dueDate =
+document.getElementById("dueDate").value;
+
+
+const {
+error
+} = await supabaseClient
+.from("borrowers")
+.insert({
+
+name:name,
+
+amount:amount,
+
+interest_rate:interest,
+
+borrow_date:borrowDate,
+
+due_date:dueDate,
+
+paid:0
+
+});
+
+
+if(error){
+
+console.error(error);
+
+alert(
+"Could not add borrower.\n\n" +
+error.message
+);
+
+return;
+
+}
+
+
+await loadBorrowers();
+
+}
+
+
+/* ==========================================
+   TOTALS
+   ========================================== */
+
+function calculateTotals(){
+
+let lent = 0;
+let expected = 0;
+let interest = 0;
+let active = 0;
+
+
+borrowers.forEach(b => {
+
+lent += Number(b.amount);
+
+expected += Number(b.totalDue);
+
+interest += Number(b.interestAmount);
+
+
+const paidThisMonth =
+payments.some(p =>
+p.name === b.name &&
+String(p.date).slice(0,7) === currentMonth()
+);
+
+
+if(!paidThisMonth){
+
+active++;
+
+}
+
+});
+
+
+document.getElementById(
+"totalLent"
+).textContent = money(lent);
+
+document.getElementById(
+"totalExpected"
+).textContent = money(expected);
+
+document.getElementById(
+"totalInterest"
+).textContent = money(interest);
+
+document.getElementById(
+"activeBorrowers"
+).textContent = active;
+
+calculateProjection();
+
+}
+
+
+/* ==========================================
+   PROJECTION
+   ========================================== */
+
+function calculateProjection(){
+
+let lent = 0;
+let projectedInterest = 0;
+
+const months =
+Number(
+document.getElementById(
+"projectionMonths"
+).value
+);
+
+
+borrowers.forEach(b => {
+
+const amount =
+Number(b.amount);
+
+const rate =
+Number(b.interest) / 100;
+
+lent += amount;
+
+projectedInterest +=
+amount * rate * months;
+
+});
+
+
+document.getElementById(
+"projectionCapital"
+).textContent =
+money(lent);
+
+
+document.getElementById(
+"projectionInterest"
+).textContent =
+money(projectedInterest);
+
+
+document.getElementById(
+"projectionTotal"
+).textContent =
+money(
+lent + projectedInterest
+);
+
+}
+
+
+/* ==========================================
+   DISPLAY ACTIVE BORROWERS
+   ========================================== */
+
+function displayBorrowers(){
+
+const table =
+document.getElementById(
+"borrowerTable"
+);
+
+const empty =
+document.getElementById(
+"emptyMessage"
+);
+
+table.innerHTML = "";
+
+let activeCount = 0;
+
+
+borrowers.forEach((b,index) => {
+
+const paidThisMonth =
+payments.some(p =>
+p.name === b.name &&
+String(p.date).slice(0,7) === currentMonth()
+);
+
+
+if(paidThisMonth){
+
+return;
+
+}
+
+
+activeCount++;
+
+
+const row =
+document.createElement("tr");
+
+
+row.innerHTML = `
+
+<td>${escapeHTML(b.name)}</td>
+
+<td>${money(b.amount)}</td>
+
+<td>${b.interest}%</td>
+
+<td>${money(b.interestAmount)}</td>
+
+<td>${money(b.totalDue)}</td>
+
+<td>${money(b.paid)}</td>
+
+<td>${money(b.balance)}</td>
+
+<td>${b.dueDate || ""}</td>
+
+<td>
+
+<button
+class="action-btn pay"
+onclick="markPaid('${b.id}')"
+>
+Paid This Month
+</button>
+
+<button
+class="action-btn delete"
+onclick="deleteBorrower('${b.id}')"
+>
+Delete
+</button>
+
+</td>
+
+`;
+
+
+table.appendChild(row);
+
+});
+
+
+empty.style.display =
+activeCount === 0
+? "block"
+: "none";
+
+}
+
+
+/* ==========================================
+   DISPLAY PAID
+   ========================================== */
+
+function displayPaid(){
+
+const table =
+document.getElementById(
+"paidTable"
+);
+
+const empty =
+document.getElementById(
+"paidEmpty"
+);
+
+table.innerHTML = "";
+
+
+const month =
+currentMonth();
+
+
+const monthlyPayments =
+payments.filter(p =>
+String(p.date).slice(0,7) === month
+);
+
+
+if(monthlyPayments.length === 0){
+
+empty.style.display = "block";
+
+return;
+
+}
+
+
+empty.style.display = "none";
+
+
+monthlyPayments.forEach(p => {
+
+const row =
+document.createElement("tr");
+
+
+row.innerHTML = `
+
+<td>${escapeHTML(p.name)}</td>
+
+<td>${money(p.amount)}</td>
+
+<td>${p.date}</td>
+
+<td>${money(p.balance)}</td>
+
+<td>
+
+<button
+class="action-btn undo"
+onclick="undoPayment('${p.id}')"
+>
+Undo
+</button>
+
+</td>
+
+`;
+
+
+table.appendChild(row);
+
+});
+
+}
+
+
+/* ==========================================
+   MARK PAID
+   ========================================== */
+
+async function markPaid(borrowerId){
+
+const borrower =
+borrowers.find(
+b => String(b.id) === String(borrowerId)
+);
+
+
+if(!borrower)
+return;
+
+
+const paymentAmount =
+prompt(
+"Enter amount paid by " +
+borrower.name +
+":"
+);
+
+
+if(paymentAmount === null)
+return;
+
+
+const amount =
+Number(paymentAmount);
+
+
+if(
+isNaN(amount) ||
+amount <= 0
+){
+
+alert(
+"Please enter a valid payment amount."
+);
+
+return;
+
+}
+
+
+const newPaid =
+Number(borrower.paid || 0)
++ amount;
+
+
+const newBalance =
+Math.max(
+0,
+borrower.totalDue - newPaid
+);
+
+
+/* UPDATE BORROWER */
+
+const {
+error:updateError
+} = await supabaseClient
+.from("borrowers")
+.update({
+paid:newPaid
+})
+.eq("id",borrower.id);
+
+
+if(updateError){
+
+console.error(updateError);
+
+alert(
+"Could not update borrower.\n\n" +
+updateError.message
+);
+
+return;
+
+}
+
+
+/* ADD PAYMENT */
+
+const today =
+new Date()
+.toISOString()
+.slice(0,10);
+
+
+const {
+error:paymentError
+} = await supabaseClient
+.from("payments")
+.insert({
+
+borrower_name:borrower.name,
+
+amount_paid:amount,
+
+payment_date:today,
+
+loan_balance:newBalance
+
+});
+
+
+if(paymentError){
+
+console.error(paymentError);
+
+/* Try to restore borrower if payment failed */
+
+await supabaseClient
+.from("borrowers")
+.update({
+paid:borrower.paid
+})
+.eq("id",borrower.id);
+
+alert(
+"Payment could not be recorded.\n\n" +
+paymentError.message
+);
+
+return;
+
+}
+
+
+await loadBorrowers();
+
+}
+
+
+/* ==========================================
+   UNDO PAYMENT
+   ========================================== */
+
+async function undoPayment(paymentId){
+
+const payment =
+payments.find(
+p => String(p.id) === String(paymentId)
+);
+
+
+if(!payment)
+return;
+
+
+const borrower =
+borrowers.find(
+b => b.name === payment.name
+);
+
+
+if(!borrower){
+
+alert(
+"Borrower could not be found."
+);
+
+return;
+
+}
+
+
+const newPaid =
+Math.max(
+0,
+Number(borrower.paid) -
+Number(payment.amount)
+);
+
+
+/* RESTORE BORROWER */
+
+const {
+error:updateError
+} = await supabaseClient
+.from("borrowers")
+.update({
+paid:newPaid
+})
+.eq("id",borrower.id);
+
+
+if(updateError){
+
+console.error(updateError);
+
+alert(
+"Could not undo payment.\n\n" +
+updateError.message
+);
+
+return;
+
+}
+
+
+/* DELETE PAYMENT */
+
+const {
+error:deleteError
+} = await supabaseClient
+.from("payments")
+.delete()
+.eq("id",payment.id);
+
+
+if(deleteError){
+
+console.error(deleteError);
+
+alert(
+"Payment was restored but could not be removed.\n\n" +
+deleteError.message
+);
+
+return;
+
+}
+
+
+await loadBorrowers();
+
+}
+
+
+/* ==========================================
+   DELETE BORROWER
+   ========================================== */
+
+async function deleteBorrower(borrowerId){
+
+if(
+!confirm(
+"Delete this borrower permanently?"
+)
+)
+return;
+
+
+const borrower =
+borrowers.find(
+b => String(b.id) === String(borrowerId)
+);
+
+
+if(!borrower)
+return;
+
+
+/* DELETE PAYMENTS FOR THIS BORROWER */
+
+const {
+error:paymentError
+} = await supabaseClient
+.from("payments")
+.delete()
+.eq(
+"borrower_name",
+borrower.name
+);
+
+
+if(paymentError){
+
+console.error(paymentError);
+
+alert(
+"Could not delete payment records.\n\n" +
+paymentError.message
+);
+
+return;
+
+}
+
+
+/* DELETE BORROWER */
+
+const {
+error
+} = await supabaseClient
+.from("borrowers")
+.delete()
+.eq("id",borrower.id);
+
+
+if(error){
+
+console.error(error);
+
+alert(
+"Could not delete borrower.\n\n" +
+error.message
+);
+
+return;
+
+}
+
+
+await loadBorrowers();
+
+}
+
+
+/* ==========================================
+   FORM
+   ========================================== */
+
+document
+.getElementById("borrowerForm")
+.addEventListener(
+"submit",
+async function(event){
+
+event.preventDefault();
+
+await addBorrowerToDatabase();
+
+this.reset();
+
+document.getElementById(
+"interest"
+).value = 50;
+
+});
+
+
+/* ==========================================
+   SECURITY HELPER
+   ========================================== */
+
+function escapeHTML(value){
+
+return String(value ?? "")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+
+/* ==========================================
+   REFRESH EVERYTHING
+   ========================================== */
+
+function renderEverything(){
+
+displayBorrowers();
+
+displayPaid();
+
+calculateTotals();
+
+}
+
+
+/* ==========================================
+   START
+   ========================================== */
+
+loadBorrowers();
+
+</script>
+
+</body>
+</html>
